@@ -1,37 +1,35 @@
-import axios from 'axios';
+import api from "./api";
+import TokenService from "./token.service";
 
-
-const API_URL = 'http://192.168.0.20:9001/';
 
 class AuthService {
-  login(user) {
-    return axios
-      .post(API_URL + 'user/signIn', {
-        email: user.email,
-        password: user.password
-      })
-      .then(response => {
-        if (response.data.access_token) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-
-          console.log(localStorage.getItem('user'))
-          console.log(parseJwt(response.data.access_token))
-        }
-
-        return response.data;
+  async login({ email, password }) {
+    const response = await api
+      .post("user/signIn", {
+        email,
+        password
       });
+    if (response.data.access_token) {
+      TokenService.setUser(response.data);
+    }
+    return response.data;
   }
 
   logout() {
-    localStorage.removeItem('user');
+    TokenService.removeUser();
   }
 
-  register(user) {
-    return axios.post(API_URL, {
-      username: user.username,
-      email: user.email,
-      password: user.password
-    });
+  async register({ user_name, email, password }) {
+    const response = await api
+      .post("user/", {
+        user_name,
+        email,
+        password
+      });
+      if (response.data.access_token) {
+        TokenService.setUser(response.data);
+      }
+      return response.data;
   }
 }
 

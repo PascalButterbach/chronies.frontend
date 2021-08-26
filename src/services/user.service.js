@@ -1,24 +1,17 @@
-import axios from 'axios';
-import authHeader from './auth-header';
-
-const API_URL = 'http://192.168.0.69:8999/';
+import api from './api';
 
 class UserService {
   getPublicContent() {
-    return axios.get(API_URL + 'image/', { headers: authHeader() });
+    return api.get('/image/');
   }
 
   getUserBoard() {
-    return axios.get(API_URL + 'image/', { headers: authHeader() });
+    return api.get('/upload');
   }
-
-  getModeratorBoard() {
-    return axios.get(API_URL + 'mod', { headers: authHeader() });
-  }
-
-  getAdminBoard() {
-    return axios.get(API_URL + 'admin', { headers: authHeader() });
-  }
+ 
+  // getAdminBoard() {
+  //   return api.get('/test/admin');
+  // }
 }
 
 export default new UserService();

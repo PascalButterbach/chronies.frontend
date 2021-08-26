@@ -37,9 +37,18 @@ export const auth = {
           return Promise.reject(error);
         }
       );
+    },
+    refreshAccessToken({ commit }, access_token) {
+      commit('refreshAccessToken', access_token);
+    },
+    updateUser({ commit }, user){
+      commit('updateUser', user);
     }
   },
   mutations: {
+    updateUser(state, user){
+      state.user = user;
+    },
     loginSuccess(state, user) {
       state.status.loggedIn = true;
       state.user = user;
@@ -54,9 +63,14 @@ export const auth = {
     },
     registerSuccess(state) {
       state.status.loggedIn = false;
+     // state.user = user;
     },
     registerFailure(state) {
       state.status.loggedIn = false;
+    },
+    refreshAccessToken(state, access_token) {
+      state.status.loggedIn = true;
+      state.user = { ...state.user, access_token: access_token };
     }
   }
 };

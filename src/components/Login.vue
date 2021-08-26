@@ -1,6 +1,6 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
+  <div class="container-fluid p-5  ">
+    <div class="card card-container p-5 w-50 m-auto">
 
       <Form @submit="handleLogin" :validation-schema="schema">
         <div class="form-group">
@@ -15,12 +15,12 @@
         </div>
 
         <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
+          <button class="btn btn-dark btn-block" :disabled="loading">
             <span
               v-show="loading"
               class="spinner-border spinner-border-sm"
             ></span>
-            <span>Login</span>
+            <span>Anmelden</span>
           </button>
         </div>
 
@@ -47,8 +47,8 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      email: yup.string().required("Email is required!"),
-      password: yup.string().required("Password is required!"),
+      email: yup.string().required("Email eingeben!"),
+      password: yup.string().required("Password eingeben!"),
     });
 
     return {
@@ -58,22 +58,22 @@ export default {
     };
   },
   computed: {
-    loggedIn() {
+    loggedIn() {      
       return this.$store.state.auth.status.loggedIn;
     },
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.push("/home");
     }
   },
   methods: {
     handleLogin(user) {
       this.loading = true;
-
+ 
       this.$store.dispatch("auth/login", user).then(
         () => {
-          this.$router.push("/profile");
+          this.$router.push("/home");
         },
         (error) => {
           this.loading = false;

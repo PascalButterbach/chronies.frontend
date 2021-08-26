@@ -11,12 +11,9 @@
         <li v-if="showAdminBoard" class="nav-item">
           <router-link to="/admin" class="nav-link">Admin Board</router-link>
         </li>
-        <li v-if="showModeratorBoard" class="nav-item">
-          <router-link to="/mod" class="nav-link">Moderator Board</router-link>
-        </li>
         <li class="nav-item">
-          <router-link v-if="currentUser" to="/user" class="nav-link"
-            >User</router-link
+          <router-link v-if="currentUser" to="/upload" class="nav-link"
+            >Bild hochladen</router-link
           >
         </li>
       </div>
@@ -24,12 +21,12 @@
       <div v-if="!currentUser" class="navbar-nav ml-auto">
         <li class="nav-item">
           <router-link to="/register" class="nav-link">
-            <font-awesome-icon icon="user-plus" /> Sign Up
+            <font-awesome-icon icon="user-plus" /> Registrieren
           </router-link>
         </li>
         <li class="nav-item">
           <router-link to="/login" class="nav-link">
-            <font-awesome-icon icon="sign-in-alt" /> Login
+            <font-awesome-icon icon="sign-in-alt" /> Anmelden
           </router-link>
         </li>
       </div>
@@ -56,7 +53,8 @@
 </template>
 
 <script>
-import parseJwt from './services/jwt.decode.js';
+import parseJwt from "./services/jwt.decode.js";
+import EventBus from "./common/eventbus";
 
 export default {
   computed: {
@@ -73,13 +71,6 @@ export default {
 
       return false;
     },
-    showModeratorBoard() {
-      if (this.currentUser && this.currentUser["roles"]) {
-        return this.currentUser["roles"].includes("ROLE_MODERATOR");
-      }
-
-      return false;
-    },
   },
   methods: {
     logOut() {
@@ -87,6 +78,14 @@ export default {
       this.$router.push("/login");
     },
   },
+  mounted() {
+    EventBus.on("logout", () => {
+      this.logOut();
+    });
+  },
+  beforeUnmount() {
+    EventBus.remove("logout");
+  }
 };
 </script>
 
